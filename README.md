@@ -25,7 +25,8 @@ Download dataset from ![link](https://www.kaggle.com/datasets/abtabm/multiclassi
 
 # Git, DVC, 以及数据库介绍
 下面是一些基本内容，并非所有的内容都会用到，因为我已经完成了其中的大部分，数据集已经是最新的了，不用额外的操作，但是你需要了解
-
+记得每次进行开发之后都要进行 *git commit -m*, 对于团队工作来说很重要，可以清楚的知道每次自己都干了什么。此外，你需要做的就是
+知道如何创建分支，然后自己的branch下面进行开发
 ## 数据库
 我用的是 [Google Drive](https://drive.google.com/drive/folders/1NE2MCMWE6OlvFni-B71KC4zwO8vEsr7d?usp=drive_link) 作为我们远程的库，用于储存所有的 `img` 文件、`model.pth`、和其他的一些大型数据。储存在谷歌云中的三分类文件夹的 ID 地址是：`1W12RrX_EbONHF2f2Uw1XOtWWNn05VhtF?usp`。以后我们数据就都存放在里面。
 
