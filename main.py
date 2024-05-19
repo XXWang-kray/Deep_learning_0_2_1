@@ -6,6 +6,8 @@ import torchvision
 # TODO: 数据预处理(数据增强，去噪等)
 
 # TODO: 搭建模型(Alexnet,VGG,Resnet)
+## no pretrained
+## pretrained
 
 # TODO: 加载数据
 

@@ -1,3 +1,7 @@
 *.png
-*.jpg
 *.PNG
+*.jpg
+*.JPG
+*.jpeg
+*.JPEG
+/data
