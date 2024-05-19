@@ -24,37 +24,63 @@ Download dataset from ![link](https://www.kaggle.com/datasets/abtabm/multiclassi
 
 
 # Git, DVC, 以及数据库介绍
+下面是一些基本内容，并非所有的内容都会用到，因为我已经完成了其中的大部分，数据集已经是最新的了，不用额外的操作，但是你需要了解
 
 ## 数据库
-我用的 [Google Drive](https://drive.google.com/drive/folders/1NE2MCMWE6OlvFni-B71KC4zwO8vEsr7d?usp=drive_link) 作为我们的远程数据库，用于储存所有的 `img` 文件、`model.pth` 和其他一些大型数据。储存在谷歌云中的三分类文件夹的 ID 地址是：`1TZ-RKDRaU4iwbZaDrIEOTe5TBvhnlCJH`。以后我们的数据都将存放在这个位置。
+我用的是 [Google Drive](https://drive.google.com/drive/folders/1NE2MCMWE6OlvFni-B71KC4zwO8vEsr7d?usp=drive_link) 作为我们远程的库，用于储存所有的 `img` 文件、`model.pth`、和其他的一些大型数据。储存在谷歌云中的三分类文件夹的 ID 地址是：`1W12RrX_EbONHF2f2Uw1XOtWWNn05VhtF?usp`。以后我们数据就都存放在里面。
 
 ## DVC (Data Version Control) 和 Git
-DVC 用于模型开发中的数据版本控制，它与 Git 一起使用，可以更好地管理和追踪数据的变化。以下是一些常用命令：
+DVC 用于模型开发和数据版本控制，它与 Git 一起使用。掌握以下命令即可：
 
-### DVC 命令
-- `dvc add your_file`：添加文件到本地 DVC 仓库
-- `dvc commit`：将当前更改记录到 DVC 缓存
-- `dvc push`：将本地缓存的数据推送到远程存储
-- `dvc pull`：从远程存储拉取数据到本地缓存
-- `dvc checkout`：切换到指定的数据版本
+- `dvc add <your_file>`: 添加文件到本地仓库
+- `dvc commit`: 提交文件到 DVC 本地仓库
+- `dvc push`: 从本地仓库推送到远程仓库
+- `dvc pull`: 从远程仓库拉取到本地
+- `dvc checkout <version>`: 切换版本
 
-### Git 命令
-- `git add`：将文件添加到 Git 暂存区
-- `git commit -m "xxxx"`：提交更改并添加注释
-- `git push origin main` 或 `git push origin your_branch`：将更改推送到远程仓库
-- `git status`：查看当前仓库状态
-- `git log`：查看提交历史
+- `git add <file>`: 添加文件到 Git 暂存区
+- `git commit -m "message"`: 提交文件到 Git 本地仓库
+- `git push origin <branch>`: 推送到远程仓库
+- `git status`: 查看当前仓库状态
+- `git log`: 查看提交历史
 
 ### 示例 1
-以下是一个使用 DVC 和 Git 进行数据版本控制的完整示例：
+以下是一个使用 DVC 和 Git 创建新分支的示例（创建你自己的分支，避免直接操作主分支 `main` 以防误操作）：
 
-1. 初始化 DVC 项目：
+1. 新建分支并自动跳转到新分支 `develop`：
+    ```sh
+    git checkout -b develop
+    ```
+
+2. 检查当前分支：
+    ```sh
+    git branch  # 确保在 develop 分支
+    ```
+
+以后你就在 `develop` 分支进行模型开发。在每次开发之前，建议你使用以下命令将 `main` 分支的最新内容拉取下来，然后合并到 `develop` 分支：
+    ```sh
+    git checkout develop  # 确保自己在 develop 分支
+    git pull origin main  # 拉取最新的 main 分支内容
+    git merge main  # 将最新的 main 分支与 develop 分支进行合并
+    ```
+
+3. 添加文件并推送：
+    ```sh
+    git add <your_file>
+    git commit -m "commit_message"
+    git push origin develop
+    ```
+
+### 示例 2
+以下是一个使用 DVC 和 Git 进行开发的完整示例：
+
+1. 初始化 DVC 项目并配置远程存储：
     ```sh
     dvc init
-    dvc remote add -d myremote 1TZ-RKDRaU4iwbZaDrIEOTe5TBvhnlCJH
-   如果是第一次还需要将你的google cloud的帐号密码添加上
-    dvc remote modify myremote gdrive_client_id <你的google cloud id>
-    dvc remote modify myremote gdrive_client_secret <你的google cloud secret>
+    dvc remote add -d myremote gdrive://1TZ-RKDRaU4iwbZaDrIEOTe5TBvhnlCJH
+    # 如果是第一次使用，还需要将你的 Google Cloud 的凭证添加上
+    dvc remote modify myremote gdrive_client_id <你的 Google Cloud ID>
+    dvc remote modify myremote gdrive_client_secret <你的 Google Cloud Secret>
     ```
 
 2. 添加数据文件到 DVC：
@@ -66,37 +92,40 @@ DVC 用于模型开发中的数据版本控制，它与 Git 一起使用，可�
 
 3. 推送到远程仓库：
     ```sh
-    dvc commit
     dvc push
-    git push origin main
+    git push origin develop
     ```
 
 4. 从远程拉取仓库：
     ```sh
     git clone git@github.com:Charly168/Deep_learning_0_2_1.git
-   或者如果已经在仓库下就使用
-    git pull (git pull origin main)
-   你如果在develop分支的话，git pull 就会拉取develop分支，也就是自己的分支。你如果要拉取我的主分支就得git pull origin main
-   
-    
+    # 或者如果已经在仓库下就使用
+    git pull origin develop
+    dvc pull  # 拉取数据，一般只需要拉取一次
     ```
 
-5. 推送到远程 Git 仓库：
+### 示例 3
+以下是一个使用 DVC 和 Git 进行数据版本控制的完整示例：
+
+1. 本地数据库的更新：
+    如果你进行了本地数据库的更新（包括模型文件等），则使用：
     ```sh
-    git push origin main
+    dvc add <your_new_data>
+    dvc commit
+    dvc push
+    
+    git add <your_new_data>.dvc
+    git commit -m "data version 2"
+    git push origin develop
+    ```
+
+2. 追溯到老版本的数据或模型：
+    如果你觉得老版本的数据或模型更好，想要追溯回老版本：
+    ```sh
+    git log  # 查看历史提交，找到目标版本的 commit hash
+    git checkout <commit_hash>  # 切换到目标版本
+    dvc checkout  # 切换 DVC 数据到目标版本
     ```
 
 通过这些步骤，你可以确保数据文件和版本控制在 DVC 和 Git 中都保持同步，并能够追踪和管理数据的不同版本。
 
-### 示例 2
-以下是一个使用 DVC 和 Git 进行新分支的创建（一个你自己的分支，不能和主分支main混淆，不然如果发生一些误操作很麻烦）：
-1. 新建分支并自动跳转到新分支develop：
-    ```sh
-    git checkout -b develop
-    ```
-2. 检查分支:
-    ```sh
-    git branch # 确保在develop分支
-    ```
-以后你就在deveop分支进行模型开发，在每次开发之前我建议你都使用 *git pull origin main* 将main 分支的最新内容都拉取下来。
-然后使用*git merge main *
