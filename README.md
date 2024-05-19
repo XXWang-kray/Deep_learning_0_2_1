@@ -130,3 +130,7 @@ DVC 用于模型开发和数据版本控制，它与 Git 一起使用。掌握�
 
 通过这些步骤，你可以确保数据文件和版本控制在 DVC 和 Git 中都保持同步，并能够追踪和管理数据的不同版本。
 
+## 一些有用的链接
+1. [如何创建google cloud api](https://docs.zfile.vip/advanced/google-drive-api/)
+2. [DVC 入门详细介绍](https://blog.51cto.com/liferecords/5132658)
+3. [Git 入门详细介绍](https://zhuanlan.zhihu.com/p/369486197)
